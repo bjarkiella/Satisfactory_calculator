@@ -4,14 +4,17 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>5460b640-0770-41d7-aadc-b60783a297e3</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>
-    </StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Satisfactory_calculator</Name>
     <RootNamespace>Satisfactory_calculator</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <IsWindowsApplication>True</IsWindowsApplication>
+    <InterpreterId>CondaEnv|CondaEnv|env</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +25,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="calculations\calculations.py" />
+    <Compile Include="common\constants.py" />
     <Compile Include="common\read_item_list.py" />
     <Compile Include="item_classes\component_classes.py" />
     <Compile Include="item_classes\building_classes.py" />
@@ -39,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="item_classes\logistic_classes.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|env" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
