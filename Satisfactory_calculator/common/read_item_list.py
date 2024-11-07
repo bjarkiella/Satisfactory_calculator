@@ -4,19 +4,24 @@
 from pandas import DataFrame
 
 # Importing Constants
-from common.constants import DATA_COLUMN_ITEM
+from common.constants import DC_ITEM
+from common.constants import DC_ITEM_TYPE
 
-def find_item(dfs:DataFrame, requested_item:str) -> dict:
+def find_item(dfs:DataFrame, requested_item:str, requested_item_type:str = None) -> dict:
     '''
-    This function finds an item name 
+    This function finds the item and its type in the dfs data frame
     '''
     req_item_dict = {}
     for sheet_name, df in dfs.items():
-        if DATA_COLUMN_ITEM in df.columns:  # Checking if the item column is available in the sheet
-            item_row = df[df[DATA_COLUMN_ITEM] == requested_item]
-
+        if DC_ITEM in df.columns:  # Checking if the item column is available in the sheet
+            if DC_ITEM_TYPE in df.columns: # Checking if the item type column is available in the sheet
+                item_row = df[(df[DC_ITEM] == requested_item) & (df[DC_ITEM_TYPE] == requested_item_type)]
+            else:
+                item_row = df[(df[DC_ITEM] == requested_item)]
             if not item_row.empty:
-                req_item_dict = item_row.iloc[0].to_dict()  # Get the first row and convert to dictionary
+                # if df[dc_item_type] == requested_item_type: # checking if the item types match
+                    # req_item_dict[sheet_name] = {}
+                req_item_dict[sheet_name] = item_row.iloc[0].to_dict()  # Get the first row and convert to dictionary
                 break
 
     return req_item_dict
