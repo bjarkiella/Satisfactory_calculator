@@ -58,4 +58,4 @@ DS_COMP = 'components'
 DS_POWER = 'power'
 DS_BUILD = 'buildings'
 DS_LOG = 'logistics'
-DS_RAW_COMP = 'raw_components'
+DS_SHEETS = [DS_RAW,DS_COMP,DS_POWER,DS_POWER,DS_BUILD,DS_LOG]
