@@ -1,4 +1,6 @@
 ### This file contains functions that assis working with the data frame of the excel input file
+### This might be an obsolete file
+
 
 # Importing packages
 from pandas import DataFrame

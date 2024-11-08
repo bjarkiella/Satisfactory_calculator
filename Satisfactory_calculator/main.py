@@ -22,7 +22,7 @@ from common.constants import *
 # Define what is requested
 requested_item = 'Screw'
 requested_item_type = 'Original'
-requested_qty = 120
+requested_qty = 120  # pcs/min
 
 # Reading the file
 dfs = pd.read_excel("item_list.xlsx", sheet_name=DS_SHEETS)
@@ -30,12 +30,19 @@ dfs = pd.read_excel("item_list.xlsx", sheet_name=DS_SHEETS)
 # The request items are now given a class
 screw_item = Item(requested_item, requested_item_type, dfs)
 
+# Requirement calculations done
+req_machines = number_of_machines(screw_item.get_output_item_per_min(),requested_qty)
+
 # Get various attributes
 print("Input Materials:", screw_item.get_input_materials())
 print("Output Materials:", screw_item.get_output_materials())
 print("Input Items per Minute:", screw_item.get_input_item_per_min())
 print("Output Item per Minute:", screw_item.get_output_item_per_min())
 print("Production Facility:", screw_item.get_production_facility())
+
+print("-----------------------------")
+print("Required number of machines:",req_machines)
+print("Required amount of power for ", req_machines, screw_item.get_production_facility(),": ",req_machines,)
 
 
 # # Finding the item use and its sheet
