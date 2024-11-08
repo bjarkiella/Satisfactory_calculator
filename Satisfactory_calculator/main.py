@@ -3,6 +3,7 @@
 # TODO: Finish the component_classes.py file, add the calculations functions etc.
 # TODO: Do the remaining classes for the other sheets
 # TODO: Print out some layout showing th number of required machines 
+# TODO: Fix the component_classes, it is returning 0.0 per minute outputs, not sure why, perhaps due to the newly implemented safeguards
 
 # Importing packages
 import pandas as pd
@@ -13,6 +14,7 @@ from calculations.calculations import amount_of_power
 from common.read_item_list import find_item
 from calculations.calculations import item_per_minute
 from item_classes.component_classes import Item
+from item_classes.building_classes import Buildings
 
 # Importing constants
 from common.constants import *
@@ -22,7 +24,7 @@ from common.constants import *
 # Define what is requested
 requested_item = 'Screw'
 requested_item_type = 'Original'
-requested_qty = 120
+requested_qty = 120  # pcs/min
 
 # Reading the file
 dfs = pd.read_excel("item_list.xlsx", sheet_name=DS_SHEETS)
@@ -30,12 +32,24 @@ dfs = pd.read_excel("item_list.xlsx", sheet_name=DS_SHEETS)
 # The request items are now given a class
 screw_item = Item(requested_item, requested_item_type, dfs)
 
+# Building class created
+build_use = screw_item.get_production_facility()
+build_item = Buildings(build_use,dfs)
+
+# Requirement calculations done
+req_machines = number_of_machines(screw_item.get_output_item_per_min(),requested_qty)
+req_power = amount_of_power(build_item.get_power_use(),req_machines)
+
 # Get various attributes
-print("Input Materials:", screw_item.get_input_materials())
-print("Output Materials:", screw_item.get_output_materials())
-print("Input Items per Minute:", screw_item.get_input_item_per_min())
-print("Output Item per Minute:", screw_item.get_output_item_per_min())
-print("Production Facility:", screw_item.get_production_facility())
+# print("Input Materials:", screw_item.get_input_materials())
+# print("Output Materials:", screw_item.get_output_materials())
+# print("Input Items per Minute:", screw_item.get_input_item_per_min())
+# print("Output Item per Minute:", screw_item.get_output_item_per_min())
+# print("Production Facility:", screw_item.get_production_facility())
+
+print("-----------------------------")
+print("Required number of machines:",req_machines)
+print("Required amount of power for ", req_machines, screw_item.get_production_facility(),": ",req_power,)
 
 
 # # Finding the item use and its sheet
