@@ -34,3 +34,14 @@ class Buildings:
         This function returns the power use of the building
         '''
         return self.attributes.get("power_use", None)
+    def get_power_unit(self)->str:
+        '''
+        This function returns the power unit
+        '''
+        return self.attributes.get("power_unit",None)
+
+    def _add_overclocker(self)->float:
+        '''
+        This function adds overclocker to the power consumption and outputs
+        '''
+        pass

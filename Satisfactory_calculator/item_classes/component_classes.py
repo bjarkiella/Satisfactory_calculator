@@ -2,6 +2,7 @@
 
 from common.constants import *
 from calculations.calculations import item_per_minute
+from common.read_item_list import get_item_row
 
 import pandas as pd
 
@@ -16,8 +17,10 @@ class Item:
         '''
         Searches the data frame for the requested item and type and assigns attributes.
         '''
-        item_row = self._get_item_row()
-    
+        #item_row = self._get_item_row(self,DS_COMP)
+        item_row = get_item_row(self.data_frame,DC_ITEM,self.name,DC_ITEM_TYPE,self.item_type,DS_COMP)
+
+
         if item_row is not None:
             attributes = {
                 **self._extract_basic_attributes(item_row),
@@ -36,18 +39,11 @@ class Item:
         else:
             raise ValueError("Item not found in the data frame")
 
-    def _get_item_row(self):
-        ''' Helper to locate the item row based on name and type. '''
-        sheet_name = next(sheet for sheet in self.data_frame if self.name in self.data_frame[sheet][DC_ITEM].values)
-        item_df = self.data_frame[sheet_name]
-        item_row = item_df[(item_df[DC_ITEM] == self.name) & (item_df[DC_ITEM_TYPE] == self.item_type)]
-
-        return item_row.iloc[0] if not item_row.empty else None
-
     def _extract_basic_attributes(self, item_row) -> dict:
         ''' Extracts core attributes like name, output quantity, and craft time. '''
         return {
-            "name": item_row.get(DC_ITEM, None),
+            "name": self.name,
+            "type": self.item_type,
             "output_qty": item_row.get(DC_ITEM_QTY, 0),
             "output_unit": item_row.get(DC_ITEM_QTY_UNIT, None),
             "craft_time": item_row.get(DC_CRAFT_TIME, 1),
@@ -139,7 +135,6 @@ class Item:
         # Initializing a default return
         if "output_qty" not in self.attributes or "craft_time" not in self.attributes:
             return None
-
         return item_per_minute(self.attributes.get("output_qty"), self.attributes.get("craft_time"))
 
     def get_extra_output_item_per_min(self) -> float:

@@ -16,6 +16,7 @@ DC_CRAFT_TIME_UNIT = 'craft_time_unit'
 
 DC_INPUT_MAT = 'DC_INPUT_MAT_'
 DC_INPUT_QTY = 'DC_INPUT_QTY_'
+DC_INPUT_QTY_UNIT = 'DC_INPUT_QTY_UNIT_'
 DC_INPUT_MAT_1 = 'input_mat_1'
 DC_INPUT_QTY_1 = 'input_qty_1'
 DC_INPUT_QTY_UNIT_1 = 'input_qty_unit_1'
@@ -41,6 +42,9 @@ DC_CAPACITY_UNIT = 'capacity_unit'
 DC_FUEL_TYPE = 'fuel_type' 
 DC_POWER_GEN = 'power_gen'
 DC_POWER_GEN_UNIT = 'power_gen_unit'
+DC_POWER_INPUT_MAT = 'DC_POWER_INPUT_MAT_'
+DC_POWER_INPUT_QTY = 'DC_POWER_INPUT_QTY_'
+DC_POWER_INPUT_QTY_UNIT = 'DC_POWER_INPUT_QTY_UNIT_'
 DC_POWER_INPUT_MAT_1 = 'input_mat_1'
 DC_POWER_INPUT_QTY_1 = 'input_qty_1'
 DC_POWER_INPUT_QTY_UNIT_1 = 'input_qty_unit_1'
@@ -50,7 +54,7 @@ DC_POWER_INPUT_QTY_UNIT_2 = 'input_qty_unit_2'
 
 # Buildings
 DC_POWER_USE = 'power_consumption'
-DC_POWER_UNIT = 'MW'
+DC_POWER_UNIT = 'power_unit'
 
 ### Naming of data sheets
 DS_RAW = 'raw_material'

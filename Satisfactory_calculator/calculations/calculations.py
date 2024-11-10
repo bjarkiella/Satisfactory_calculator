@@ -2,6 +2,7 @@
 
 # Importing Constants
 from common.constants import *
+import math as m
 
 
 def number_of_machines(production_rate:float,qty:float)->float:
@@ -36,6 +37,11 @@ def item_per_minute(production_qty:float,craft_time:float)->float:
     '''
     return production_qty * 60 / craft_time
 
+def amount_of_power_gen(power_required:float,power_gen:float)->float:
+    '''
+    This function returns the amount of power generator required to fulfill power demand
+    '''
+    return max(1.0, m.ceil(power_required / power_gen))
 # def item_per_minute(item:dict)->dict:
 #     '''
 #     This function calculates the items per minute for request item
