@@ -56,6 +56,9 @@ DC_POWER_INPUT_QTY_UNIT_2 = 'input_qty_unit_2'
 DC_POWER_USE = 'power_consumption'
 DC_POWER_UNIT = 'power_unit'
 
+# Raw materials
+DC_RAW_NODE = 'node'
+
 ### Naming of data sheets
 DS_RAW = 'raw_material'
 DS_COMP = 'components'

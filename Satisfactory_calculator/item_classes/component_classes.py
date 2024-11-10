@@ -3,13 +3,16 @@
 from common.constants import *
 from calculations.calculations import item_per_minute
 from common.read_item_list import get_item_row
+from common.common_checks import check_overclock
+from calculations.calculations import overclock_factor
 
 import pandas as pd
 
 class Item:
-    def __init__(self,name:str,item_type:str,data_frame:pd.DataFrame) -> None:
+    def __init__(self,name:str,item_type:str,overclock:float,data_frame:pd.DataFrame) -> None:
         self.name = name
         self.item_type = item_type
+        self.overclock = check_overclock(overclock)
         self.data_frame = data_frame
         self.attributes = self._find_item()
     
@@ -44,9 +47,9 @@ class Item:
         return {
             "name": self.name,
             "type": self.item_type,
-            "output_qty": item_row.get(DC_ITEM_QTY, 0),
+            "output_qty": item_row.get(DC_ITEM_QTY, 0)*overclock_factor(self.overclock),
             "output_unit": item_row.get(DC_ITEM_QTY_UNIT, None),
-            "craft_time": item_row.get(DC_CRAFT_TIME, 1),
+            "craft_time": item_row.get(DC_CRAFT_TIME, 1)/overclock_factor(self.overclock),
             "craft_time_unit": item_row.get(DC_CRAFT_TIME_UNIT, None)
         }
 
@@ -58,7 +61,7 @@ class Item:
             if pd.notna(material):  # Only add non-null materials
                 input_materials.append({
                     "material": material,
-                    "quantity": item_row.get(f"{DC_INPUT_QTY}_{i}", 0),
+                    "quantity": item_row.get(f"{DC_INPUT_QTY}_{i}", 0)*overclock_factor(self.overclock),
                     "unit": item_row.get(f"{DC_INPUT_QTY_UNIT}_{i}", None)
                 })
         return input_materials
@@ -69,7 +72,7 @@ class Item:
         if pd.notna(extra_item):
             return {
                 "extra_item": extra_item,
-                "extra_item_qty": item_row.get(DC_EXTA_ITEM_QTY, 0),
+                "extra_item_qty": item_row.get(DC_EXTA_ITEM_QTY, 0)*overclock_factor(self.overclock),
                 "extra_item_unit": item_row.get(DC_EXTA_ITEM_UNIT, None)
             }
         return {}

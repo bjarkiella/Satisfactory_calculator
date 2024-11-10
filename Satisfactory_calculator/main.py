@@ -23,26 +23,28 @@ from common.constants import *
 requested_item = 'Screw'
 requested_item_type = 'Original'
 requested_qty = 120  # pcs/min
+requested_item_overclock = 50 # Overclock in %, min 1% max 250%
 
 # Define the power generation
 requested_power = 'Coal Generator'
 requested_fuel_type = 'Coal'
+requested_power_overclock = 100  # Overclock in %
 
 # Reading the file
 dfs = pd.read_excel("item_list.xlsx", sheet_name=DS_SHEETS)
 
 # Power generator class created
-power_use = PowerGenerator(requested_power, requested_fuel_type, dfs)
+power_use = PowerGenerator(requested_power, requested_fuel_type, requested_power_overclock, dfs)
 
 # The request items are now given a class
-screw_item = Item(requested_item, requested_item_type, dfs)
+req_item = Item(requested_item, requested_item_type, requested_item_overclock, dfs)
 
 # Building class created
-build_use = screw_item.get_production_facility()
-build_item = Buildings(build_use,dfs)
+build_use = req_item.get_production_facility()
+build_item = Buildings(build_use,requested_item_overclock,dfs)
 
 # Requirement calculations done
-req_machines = number_of_machines(screw_item.get_output_item_per_min(),requested_qty)
+req_machines = number_of_machines(req_item.get_output_item_per_min(),requested_qty)
 req_power = amount_of_power(build_item.get_power_use(),req_machines)
 req_power_gen = amount_of_power_gen(req_power,power_use.get_power_gen())
 
@@ -53,14 +55,21 @@ req_power_gen = amount_of_power_gen(req_power,power_use.get_power_gen())
 # print("Output Item per Minute:", screw_item.get_output_item_per_min())
 # print("Production Facility:", screw_item.get_production_facility())
 
-print("-----------------------------")
-print("Required number of machines:",req_machines)
-print("Required amount of power for ", req_machines, screw_item.get_production_facility(),": ",req_power,build_item.get_power_unit())
-print("Required number of ", requested_power, " using ",requested_fuel_type, " as fuel: ", req_power_gen)
+print("-------- Item request --------")
+print("Requested item: ", req_item.name," and type: ",req_item.item_type)
+print("Requested qty: ", requested_qty)
+print("Requested overlock: ", requested_item_overclock,"%")
 
-print("-----------------------------")
+print(' ')
+print("-------- Power Generation --------")
+print("Requested power generator: ", power_use.name, " and type: ",power_use.fuel_type)
+print("Requested power overclock: ", requested_power_overclock, "%")
+
+print(' ')
+print("--------- Required Machines ---------")
 print("Required number of machines:",req_machines)
-print("Required amount of power for ", req_machines, screw_item.get_production_facility(),": ",req_machines,)
+print("Required amount of power for ", req_item.get_production_facility(),": ",req_power,build_item.get_power_unit())
+print("Required number of ", requested_power, " using ",requested_fuel_type, " as fuel: ", req_power_gen)
 
 
 # # Finding the item use and its sheet
