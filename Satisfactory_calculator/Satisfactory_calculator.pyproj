@@ -26,6 +26,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="calculations\calculations.py" />
+    <Compile Include="common\common_checks.py" />
     <Compile Include="common\constants.py" />
     <Compile Include="common\read_item_list.py" />
     <Compile Include="item_classes\component_classes.py" />

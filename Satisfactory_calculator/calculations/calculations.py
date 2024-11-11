@@ -4,32 +4,18 @@
 from common.constants import *
 import math as m
 
-
 def number_of_machines(production_rate:float,qty:float)->float:
     '''
     This function calculates the number of machines required for desired output
     '''
     
-    return qty/production_rate
-
-# def number_of_machines(item:dict,qty:int)->float:
-#     '''
-#     This function calculates the number of machines required for desired output
-#     '''
-    
-#     return qty/item[DC_ITEM_PER_MIN]
+    return max(1.0, round(qty/production_rate,2))
 
 def amount_of_power(power_use:float,no_machines:float)->float:
     '''
     This function calculates the total power consumptions of the machines
     '''
     return power_use*no_machines
-
-# def amount_of_power(item:dict,no_machines:float)->float:
-#     '''
-#     This function calculates the total power consumptions of the machines
-#     '''
-#     return item[DC_POWER_USE]*no_machines
 
 def item_per_minute(production_qty:float,craft_time:float)->float:
     '''
@@ -41,27 +27,16 @@ def amount_of_power_gen(power_required:float,power_gen:float)->float:
     '''
     This function returns the amount of power generator required to fulfill power demand
     '''
-    return max(1.0, m.ceil(power_required / power_gen))
-# def item_per_minute(item:dict)->dict:
-#     '''
-#     This function calculates the items per minute for request item
-#     '''
-#     # Initilizing
-#     no_inputs = len([key for key in globals() if key.startswith(DC_INPUT_MAT)])
-    
-#     # Checking if craft_time column is present before calculating
-#     if DC_CRAFT_TIME in (data_columns := item):
-#         item['item_per_min'] = item[DC_ITEM_QTY] * float(60) / item[DC_CRAFT_TIME] 
+    return max(1.0, round(power_required / power_gen,2))
 
-#         # Calculating the input materials, if present
-#         if DC_INPUT_MAT_1 in (data_columns := item):
-#             for i in range(1,no_inputs + 1):
-#                 mat_key = globals().get(f'{DC_INPUT_MAT}_{i}')
-#                 qty_key = globals().get(f'{DC_INPUT_QTY}_{i}')
-#                 per_min_key = f'input_{i}_per_min'
-#                 if mat_key in data_columns and item.get(mat_key):
-#                     item[per_min_key] = item[qty_key] * 60 / item[DC_CRAFT_TIME]
-#                 else:
-#                     item[per_min_key] = None
+def overclock_factor(value:float)->float:
+    '''
+    This function returns an overclock value
+    '''
+    return value/100.0
 
-#     return item
+def overclock_power(value:float)->float:
+    '''
+    This function calculates the overclock factor on power consumption of a building
+    '''
+    return round(m.pow(value/100.0,1.321928),5)

@@ -28,7 +28,8 @@ class RawMaterial:
                 "output_unit": raw_row.get(DC_ITEM_QTY_UNIT, None),
                 "craft_time": raw_row.get(DC_CRAFT_TIME, 1),
                 "craft_time_unit": raw_row.get(DC_CRAFT_TIME_UNIT, None),
-                "production_facility": raw_row.get(DC_CRAFTED_IN, None)
+                "production_facility": raw_row.get(DC_CRAFTED_IN, None),
+                "node": raw_row.get(DC_RAW_NODE, None)
             }
             return attributes
         else:

@@ -1,7 +1,4 @@
-### This file contains functions that assis working with the data frame of the excel input file
-### This might be an obsolete file
-
-
+### This file contains functions that assist working with the data frame of the excel input file
 
 # Importing packages
 import pandas as pd
