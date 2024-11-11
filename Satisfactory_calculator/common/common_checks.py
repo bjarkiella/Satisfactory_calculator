@@ -1,4 +1,4 @@
-# This file will contain general checks used throughout the program
+# This file contains general checks used throughout the program
 
 
 def check_overclock(value: float) -> float:

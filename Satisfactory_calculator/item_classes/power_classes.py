@@ -1,6 +1,5 @@
 ### Here are the attributes of power generators
 
-# TODO: Overclocker modifiers to be added here
 from common.constants import *
 from common.read_item_list import get_item_row
 from common.common_checks import check_overclock
@@ -44,13 +43,17 @@ class PowerGenerator:
     def _extract_input_materials(self, power_gen_row) -> list:
         ''' Extracts input materials, handling missing materials gracefully. '''
         input_materials = []
-        for i in range(1, 2):  # For DC_POWER_INPUT_MAT_1 to DC_POWER_INPUT_MAT_2
-            material = power_gen_row.get(f"{DC_POWER_INPUT_MAT}_{i}", None)
+        material_keys = [DC_POWER_INPUT_MAT_1, DC_POWER_INPUT_MAT_2]
+        quantity_keys = [DC_POWER_INPUT_QTY_1, DC_POWER_INPUT_QTY_2]
+        unit_keys = [DC_POWER_INPUT_QTY_UNIT_1, DC_POWER_INPUT_QTY_UNIT_2]
+
+        for material_key, quantity_key, unit_key in zip(material_keys, quantity_keys, unit_keys):
+            material = power_gen_row.get(material_key, None)
             if pd.notna(material):  # Only add non-null materials
                 input_materials.append({
                     "material": material,
-                    "quantity": power_gen_row.get(f"{DC_POWER_INPUT_QTY}_{i}", 0)*overclock_factor(self.overclock),
-                    "unit": power_gen_row.get(f"{DC_POWER_INPUT_QTY_UNIT}_{i}", None)
+                    "quantity": power_gen_row.get(quantity_key, 0)*overclock_factor(self.overclock),
+                    "unit": power_gen_row.get(unit_key, None)
                 })
         return input_materials
 

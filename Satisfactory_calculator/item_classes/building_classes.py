@@ -5,6 +5,7 @@
 from common.constants import *
 from common.common_checks import check_overclock
 from calculations.calculations import overclock_factor
+from calculations.calculations import overclock_power
 
 import pandas as pd
 
@@ -25,7 +26,7 @@ class Buildings:
         if not building_row.empty:
             attributes = {
                 "name": building_row.iloc[0].get(DC_ITEM, None),
-                "power_use": building_row.iloc[0].get(DC_POWER_USE, 0)*overclock_factor(self.overclock),
+                "power_use": building_row.iloc[0].get(DC_POWER_USE, 0)*overclock_power(self.overclock),
                 "power_unit": building_row.iloc[0].get(DC_POWER_UNIT, None),
             }
             return attributes

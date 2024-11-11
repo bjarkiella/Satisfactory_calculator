@@ -23,7 +23,6 @@ class Item:
         #item_row = self._get_item_row(self,DS_COMP)
         item_row = get_item_row(self.data_frame,DC_ITEM,self.name,DC_ITEM_TYPE,self.item_type,DS_COMP)
 
-
         if item_row is not None:
             attributes = {
                 **self._extract_basic_attributes(item_row),
@@ -37,7 +36,7 @@ class Item:
         
             # Add production facility if available
             attributes["production_facility"] = item_row.get(DC_CRAFTED_IN, None)
-        
+            print(attributes)
             return attributes
         else:
             raise ValueError("Item not found in the data frame")
@@ -47,7 +46,7 @@ class Item:
         return {
             "name": self.name,
             "type": self.item_type,
-            "output_qty": item_row.get(DC_ITEM_QTY, 0)*overclock_factor(self.overclock),
+            "output_qty": item_row.get(DC_ITEM_QTY, 0),
             "output_unit": item_row.get(DC_ITEM_QTY_UNIT, None),
             "craft_time": item_row.get(DC_CRAFT_TIME, 1)/overclock_factor(self.overclock),
             "craft_time_unit": item_row.get(DC_CRAFT_TIME_UNIT, None)
@@ -56,13 +55,18 @@ class Item:
     def _extract_input_materials(self, item_row) -> list:
         ''' Extracts input materials, handling missing materials gracefully. '''
         input_materials = []
-        for i in range(1, 5):  # For DC_INPUT_MAT_1 to DC_INPUT_MAT_4
-            material = item_row.get(f"{DC_INPUT_MAT}_{i}", None)
+
+        material_keys = [DC_INPUT_MAT_1, DC_INPUT_MAT_2, DC_INPUT_MAT_3, DC_INPUT_MAT_4]
+        quantity_keys = [DC_INPUT_QTY_1, DC_INPUT_QTY_2, DC_INPUT_QTY_3, DC_INPUT_QTY_4]
+        unit_keys = [DC_INPUT_QTY_UNIT_1, DC_INPUT_QTY_UNIT_2, DC_INPUT_QTY_UNIT_3, DC_INPUT_QTY_UNIT_4]
+
+        for material_key, quantity_key, unit_key in zip(material_keys, quantity_keys, unit_keys):
+            material = item_row.get(material_key, None)
             if pd.notna(material):  # Only add non-null materials
                 input_materials.append({
                     "material": material,
-                    "quantity": item_row.get(f"{DC_INPUT_QTY}_{i}", 0)*overclock_factor(self.overclock),
-                    "unit": item_row.get(f"{DC_INPUT_QTY_UNIT}_{i}", None)
+                    "quantity": item_row.get(quantity_key, 0),
+                    "unit": item_row.get(unit_key, None)
                 })
         return input_materials
 
@@ -72,7 +76,7 @@ class Item:
         if pd.notna(extra_item):
             return {
                 "extra_item": extra_item,
-                "extra_item_qty": item_row.get(DC_EXTA_ITEM_QTY, 0)*overclock_factor(self.overclock),
+                "extra_item_qty": item_row.get(DC_EXTA_ITEM_QTY, 0),
                 "extra_item_unit": item_row.get(DC_EXTA_ITEM_UNIT, None)
             }
         return {}
