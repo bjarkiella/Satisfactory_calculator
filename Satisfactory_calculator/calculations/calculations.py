@@ -40,3 +40,4 @@ def overclock_power(value:float)->float:
     This function calculates the overclock factor on power consumption of a building
     '''
     return round(m.pow(value/100.0,1.321928),5)
+

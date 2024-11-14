@@ -2,6 +2,7 @@
 
 # Importing packages
 import pandas as pd
+import math as m
 
 # Importing functions
 from calculations.calculations import number_of_machines
@@ -14,6 +15,8 @@ from item_classes.power_classes import PowerGenerator
 
 # Importing constants
 from common.constants import *
+
+
 
 # Define what is requested
 requested_item = 'Screw'
@@ -46,6 +49,12 @@ req_machines = number_of_machines(req_item.get_output_item_per_min(),requested_q
 req_power = amount_of_power(build_item.get_power_use(),req_machines)
 req_power_gen = amount_of_power_gen(req_power,power_use.get_power_gen())
 
+# Logstics calculations done
+type_in_belt = req_item.get_belt_type_in_name(requested_qty)
+no_in_belt = req_item.get_belt_type_in_num_belts(requested_qty)
+type_out_belt = req_item.get_belt_type_out_name(requested_qty)
+no_out_belt = req_item.get_belt_type_out_num_belts(requested_qty) # This should always be 1
+
 print("-------- Item request --------")
 print("Requested item: ", req_item.name," and type: ",req_item.item_type)
 print("Requested qty: ", requested_qty)
@@ -62,6 +71,11 @@ print("Required number of machines:",req_machines)
 print("Required amount of power for ", req_item.get_production_facility(),": ",req_power,build_item.get_power_unit())
 print("Required number of ", requested_power, " using ",requested_fuel_type, " as fuel: ", req_power_gen)
 print("Generated power ", power_use.get_power_gen(),power_use.get_power_gen_unit())
+
+print("--------- Required Logistics ---------")
+print("Required belt type for input:",no_in_belt,"off type",type_in_belt)
+print("Required belt type for output:",m.ceil(req_machines),"off type",type_out_belt)
+
 
 print(' ')
 print("--------- Debug check ---------")
