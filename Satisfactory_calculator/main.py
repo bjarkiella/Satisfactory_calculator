@@ -24,12 +24,12 @@ requested_item_type = 'Original'
 # requested_item = 'Biomass'
 # requested_item_type = 'Wood'
 requested_qty = 120  # pcs/min
-requested_item_overclock = 120 # Overclock in %, min 1% max 250%
+requested_item_overclock = 100 # Overclock in %, min 1% max 250%
 
 # Define the power generation
 requested_power = 'Coal Generator'
 requested_fuel_type = 'Coal'
-requested_power_overclock = 150  # Overclock in %
+requested_power_overclock = 100  # Overclock in %
 
 # Reading the file
 dfs = pd.read_excel("item_list.xlsx", sheet_name=DS_SHEETS)
@@ -75,6 +75,9 @@ print("Generated power ", power_use.get_power_gen(),power_use.get_power_gen_unit
 print("--------- Required Logistics ---------")
 print("Required belt type for input:",no_in_belt,"off type",type_in_belt)
 print("Required belt type for output:",m.ceil(req_machines),"off type",type_out_belt)
+
+print("--------- Required Inputs ---------")
+print("Required input items:",req_item.get_input_item_per_min())
 
 
 print(' ')

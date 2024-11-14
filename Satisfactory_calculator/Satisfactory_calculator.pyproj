@@ -32,6 +32,7 @@
     <Compile Include="item_classes\component_classes.py" />
     <Compile Include="item_classes\building_classes.py" />
     <Compile Include="item_classes\power_classes.py" />
+    <Compile Include="item_classes\production_classes.py" />
     <Compile Include="item_classes\raw_mat_classes.py" />
     <Compile Include="main.py" />
   </ItemGroup>
