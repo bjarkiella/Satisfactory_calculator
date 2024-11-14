@@ -4,9 +4,13 @@ from common.constants import *
 from calculations.calculations import item_per_minute
 from common.read_item_list import get_item_row
 from common.common_checks import check_overclock
+from item_classes.logistic_classes import Logistics
 from calculations.calculations import overclock_factor
+from calculations.calculations import number_of_machines
 
 import pandas as pd
+
+from item_classes.logistic_classes import Logistics
 
 class Item:
     def __init__(self,name:str,item_type:str,overclock:float,data_frame:pd.DataFrame) -> None:
@@ -162,6 +166,69 @@ class Item:
         This function returns the crafting facility of the item
         '''
         return self.attributes.get("production_facility", None)
+
+    def _get_belt_type_in(self, req_rate:float)->dict:
+        '''
+        This function determines the required belt type
+        '''       
+        # Finds the required belts and returns its name and capcity
+        belt_type = Logistics(self.data_frame,req_rate)
+        return {"name":belt_type.get_log_name(),
+                "capacity":belt_type.get_log_capacity(),
+                "num_belts":belt_type.get_no_belts()
+                }
+   
+    def get_belt_type_in_name(self, req_rate: float) -> str:
+        '''
+        Returns the name of the required belt type for the given rate.
+        '''
+        return self._get_belt_type_in(req_rate)["name"]
+
+    def get_belt_type_in_capacity(self, req_rate: float) -> float:
+        '''
+        Returns the capacity of the required belt type for the given rate.
+        '''
+        return self._get_belt_type_in(req_rate)["capacity"]
+
+    def get_belt_type_in_num_belts(self, req_rate: float) -> int:
+        '''
+        Returns the number of belts required for the given rate.
+        '''
+        return self._get_belt_type_in(req_rate)["num_belts"]
+
+    def _get_belt_type_out(self, req_rate:float)->str:
+        '''
+        This function determines the required belt type for the output
+        '''      
+        # Calculate the belt rate required
+        req_machines = number_of_machines(self.get_output_item_per_min(),req_rate)
+        updated_req_rate = req_rate/req_machines
+        
+        # Finds the required belts and returns its name and capacity
+        belt_type = Logistics(self.data_frame,updated_req_rate)
+        return {"name":belt_type.get_log_name(),
+                "capacity":belt_type.get_log_capacity(),
+                "num_belts":belt_type.get_no_belts()
+                }
+    
+    def get_belt_type_out_name(self, req_rate: float) -> str:
+        '''
+        Returns the name of the required belt type for the given rate.
+        '''
+        return self._get_belt_type_out(req_rate)["name"]
+
+    def get_belt_type_out_capacity(self, req_rate: float) -> float:
+        '''
+        Returns the capacity of the required belt type for the given rate.
+        '''
+        return self._get_belt_type_out(req_rate)["capacity"]
+
+    def get_belt_type_out_num_belts(self, req_rate: float) -> int:
+        '''
+        Returns the number of belts required for the given rate.
+        '''
+        return self._get_belt_type_out(req_rate)["num_belts"]
+
 
     def __str__(self):
         return f"{self.name}: {self.attributes}"
