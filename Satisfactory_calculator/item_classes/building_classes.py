@@ -12,16 +12,15 @@ import pandas as pd
 class Buildings:
     def __init__(self,name:str,overclock:float,data_frame:pd.DataFrame) -> None:
         self.name = name
+        self.data_frame = data_frame[DS_BUILD]
         self.overclock = check_overclock(overclock)
-        self.data_frame = data_frame
         self.attributes = self._find_building()
-    
+
     def _find_building(self) -> dict:
         '''
         This function searches the data frame for the requested item and type and gives it the attributes
         '''
-        building_df = self.data_frame[DS_BUILD]
-        building_row = building_df[(building_df[DC_ITEM] == self.name)]
+        building_row = self.data_frame[(self.data_frame[DC_ITEM] == self.name)]
 
         if not building_row.empty:
             attributes = {

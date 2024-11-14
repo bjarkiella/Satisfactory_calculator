@@ -19,7 +19,6 @@ class PowerGenerator:
         '''
         This function searches the data frame for the requested item and type and gives it the attributes
         '''
-        
         power_gen_row = get_item_row(self.data_frame,DC_ITEM,self.name,DC_FUEL_TYPE,self.fuel_type,DS_POWER)
 
         if power_gen_row is not None:
