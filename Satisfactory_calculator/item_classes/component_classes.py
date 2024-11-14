@@ -24,7 +24,6 @@ class Item:
         '''
         Searches the data frame for the requested item and type and assigns attributes.
         '''
-        #item_row = self._get_item_row(self,DS_COMP)
         item_row = get_item_row(self.data_frame,DC_ITEM,self.name,DC_ITEM_TYPE,self.item_type,DS_COMP)
 
         if item_row is not None:
@@ -40,7 +39,6 @@ class Item:
         
             # Add production facility if available
             attributes["production_facility"] = item_row.get(DC_CRAFTED_IN, None)
-            print(attributes)
             return attributes
         else:
             raise ValueError("Item not found in the data frame")

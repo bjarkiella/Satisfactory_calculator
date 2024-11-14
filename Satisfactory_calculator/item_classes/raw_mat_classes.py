@@ -11,6 +11,7 @@ import pandas as pd
 class RawMaterial:
     def __init__(self,name:str,data_frame:pd.DataFrame) -> None:
         self.name = name
+        self.data_frame = data_frame[DS_RAW]
         self.data_frame = data_frame
         self.attributes = self._find_raw()
     
@@ -18,8 +19,7 @@ class RawMaterial:
         '''
         This function searches the data frame for the requested item and type and gives it the attributes
         '''
-        raw_df = self.data_frame[DS_RAW]
-        raw_row = raw_df[(raw_df[DC_ITEM] == self.name)]
+        raw_row = self.raw_df[(self.raw_df[DC_ITEM] == self.name)]
 
         if not raw_row.empty:
             attributes = {
