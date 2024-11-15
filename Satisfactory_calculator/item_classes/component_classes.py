@@ -227,6 +227,11 @@ class Item:
         '''
         return self._get_belt_type_out(req_rate)["num_belts"]
 
+    def get_data_frame(self)->pd.DataFrame:
+        '''
+        This function returns the data frame
+        '''
+        return self.data_frame
 
     def __str__(self):
         return f"{self.name}: {self.attributes}"

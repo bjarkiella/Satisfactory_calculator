@@ -12,11 +12,10 @@ from calculations.calculations import amount_of_power_gen
 from item_classes.component_classes import Item
 from item_classes.building_classes import Buildings
 from item_classes.power_classes import PowerGenerator
+from item_classes.production_classes import ProductionLine
 
 # Importing constants
 from common.constants import *
-
-
 
 # Define what is requested
 requested_item = 'Screw'
@@ -53,12 +52,18 @@ req_power_gen = amount_of_power_gen(req_power,power_use.get_power_gen())
 type_in_belt = req_item.get_belt_type_in_name(requested_qty)
 no_in_belt = req_item.get_belt_type_in_num_belts(requested_qty)
 type_out_belt = req_item.get_belt_type_out_name(requested_qty)
-no_out_belt = req_item.get_belt_type_out_num_belts(requested_qty) # This should always be 1
+no_out_belt = req_item.get_belt_type_out_num_belts(requested_qty) 
+
+# Production line calculations
+production_line = ProductionLine(req_item,requested_qty,requested_item_overclock)
 
 print("-------- Item request --------")
 print("Requested item: ", req_item.name," and type: ",req_item.item_type)
 print("Requested qty: ", requested_qty)
 print("Requested overlock: ", requested_item_overclock,"%")
+
+print("--------- Required Inputs ---------")
+print("Required input items:",req_item.get_input_item_per_min())
 
 print(' ')
 print("-------- Power Generation --------")
@@ -72,13 +77,14 @@ print("Required amount of power for ", req_item.get_production_facility(),": ",r
 print("Required number of ", requested_power, " using ",requested_fuel_type, " as fuel: ", req_power_gen)
 print("Generated power ", power_use.get_power_gen(),power_use.get_power_gen_unit())
 
+print(' ')
 print("--------- Required Logistics ---------")
 print("Required belt type for input:",no_in_belt,"off type",type_in_belt)
 print("Required belt type for output:",m.ceil(req_machines),"off type",type_out_belt)
 
-print("--------- Required Inputs ---------")
-print("Required input items:",req_item.get_input_item_per_min())
-
+print(' ')
+print("--------- Full production line ---------")
+production_line.print_requirements()
 
 print(' ')
 print("--------- Debug check ---------")

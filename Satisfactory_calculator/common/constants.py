@@ -4,6 +4,7 @@
 # Components
 DC_ITEM = 'Item'
 DC_ITEM_TYPE = 'item_type'
+DC_DEFAULT_ITEM_TYPE = 'Original'
 DC_ITEM_QTY = 'item_qty'
 DC_ITEM_QTY_UNIT = 'item_qty_unit'
 
