@@ -5,14 +5,17 @@ from common.common_checks import check_overclock
 from calculations.calculations import overclock_factor
 from calculations.calculations import overclock_power
 
+from common.error_logs import ErrorLogger
+
 import pandas as pd
 
 class Buildings:
-    def __init__(self,name:str,overclock:float,data_frame:pd.DataFrame) -> None:
+    def __init__(self,name:str,overclock:float,data_frame:pd.DataFrame,logger:ErrorLogger) -> None:
         self.name = name
         self.data_frame = data_frame[DS_BUILD]
         self.overclock = check_overclock(overclock)
         self.attributes = self._find_building()
+        self.logger = logger
 
     def _find_building(self) -> dict:
         '''

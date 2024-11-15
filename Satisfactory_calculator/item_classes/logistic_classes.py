@@ -1,21 +1,16 @@
 ### Here are the attributes of logistic belts defined
 from common.constants import *
 
+from common.error_logs import ErrorLogger
+
 import pandas as pd
 
-class Logistics:
-    # def __init__(self,name:str,data_frame:pd.DataFrame) -> None:
-    #     self.name = name
-    #     self.data_frame = data_frame
-    #     self.attributes = self._find_logistics()
-    #     self.data_frame = data_frame(DS_LOG)
-     
-    def __init__(self, data_frame:pd.DataFrame, required_capacity:float) -> None:
+class Logistics:     
+    def __init__(self, data_frame:pd.DataFrame, required_capacity:float, logger:ErrorLogger) -> None:
         self.data_frame = data_frame[DS_LOG]
         self.required_capacity = required_capacity
         self.attributes = self._find_logistics()
-      
-        
+        self.logger = logger
 
     def _find_logistics(self) -> dict:
         '''
@@ -45,24 +40,6 @@ class Logistics:
         # If no belt meets the capacity, raise an exception or handle accordingly
         raise ValueError("No suitable belt found for the required capacity")
 
-    # def _find_logistics(self) -> dict:
-    #     '''
-    #     This function searches the data frame for the requested item and type and gives it the attributes
-    #     '''
-    #     logistics_df = self.data_frame[DS_LOG]
-    #     logistics_row = logistics_df[(logistics_df[DC_ITEM] == self.name)]
-
-    #     if not logistics_row.empty:
-    #         attributes = {
-    #             "name": logistics_row.iloc[0].get(DC_ITEM, None),
-    #             "capacity": logistics_row.iloc[0].get(DC_CAPACITY, 0),
-    #             "capacity_unit": logistics_row.iloc[0].get(DC_CAPACITY_UNIT, None)
-    #         }
-    #         return attributes
-    #     else:
-    #         raise ValueError("Item not found in the data frame")
-
-
     def get_log_name(self)->str:
         '''
         This function returns the name of logistic belt
@@ -87,8 +64,3 @@ class Logistics:
         '''
         return self.attributes.get("capacity_unit",None)
 
-    # def find_belt_for_capacity(self, required_capacity:float)->dict:
-    #     '''
-    #     This function returns the item row
-    #     '''
-    #     return self.attributes

@@ -1,29 +1,26 @@
 # This file contains a class that breaks down the production line of an Item and Buildings objects
-# TODO: Need to fix this one. The idea is that:
-#  1. the original Item is sent here and 
-#  2. Then looped through a function in this class over all the input materials until it cant be found in the item list
-#  2a. Propably need a safeguard here to avoid endless loops, perhaps up to max 10 iterations and have a message output for that
-#  3. It should keep track of the number of production facilites for each produced Item
-#  4. It should keep track of total amount of power required for each Item
-#  5. Until no the input item cannot be found as an Item
 
 from item_classes.component_classes import Item
 from item_classes.building_classes import Buildings
 from calculations.calculations import number_of_machines
 from common.constants import *
 
+from common.error_logs import ErrorLogger
+
 
 class ProductionLine:
 
-    def __init__(self, item: Item, target_output_rate: float, overclock: float = 100.0):
+    def __init__(self, item: Item, target_output_rate: float, overclock: float, logger: ErrorLogger):
         self.item = item
         self.target_output_rate = target_output_rate
         self.overclock = overclock
         self.default_type = DC_DEFAULT_ITEM_TYPE
         self.default_overclock = 100.0
         self.data_frame = self.item.get_data_frame()
-        self.building = Buildings(self.item.get_production_facility(),self.overclock,self.data_frame)
+        self.logger = logger
+        self.building = Buildings(self.item.get_production_facility(),self.overclock,self.data_frame,self.logger)
         self.requirements = self._calculate_requirements()
+        
 
     def _calculate_requirements(self):
         '''
@@ -43,7 +40,7 @@ class ProductionLine:
         machine_count = number_of_machines(item.get_output_item_per_min(),req_output_rate)
         
         # Create a Buildings object for this item
-        building = Buildings(item.get_production_facility(), overclock, self.data_frame)
+        building = Buildings(item.get_production_facility(), overclock, self.data_frame, self.logger)
         
         # Get the input materials for this item
         input_materials = item.get_input_materials()
@@ -55,8 +52,8 @@ class ProductionLine:
         # Loop through each input material and calculate recursively
         for input_material in input_materials:
             try:
-                input_item = Item(input_material["material"], self.default_type, self.default_overclock, self.data_frame)  # Initialize Item for each input
-                input_building = Buildings(input_item.get_production_facility(),self.default_overclock, self.data_frame)
+                input_item = Item(input_material["material"], self.default_type, self.default_overclock, self.data_frame,self.logger)  # Initialize Item for each input
+                input_building = Buildings(input_item.get_production_facility(),self.default_overclock, self.data_frame,self.logger)
             except ValueError:
                 requirements["inputs"][input_material["material"]] = {"error": "Item not found"}
                 continue

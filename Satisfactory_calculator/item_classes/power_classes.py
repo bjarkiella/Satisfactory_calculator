@@ -5,15 +5,18 @@ from common.read_item_list import get_item_row
 from common.common_checks import check_overclock
 from calculations.calculations import overclock_factor
 
+from common.error_logs import ErrorLogger
+
 import pandas as pd
 
 class PowerGenerator:
-    def __init__(self,name:str,fuel_type:str,overclock:float,data_frame:pd.DataFrame) -> None:
+    def __init__(self,name:str,fuel_type:str,overclock:float,data_frame:pd.DataFrame,logger:ErrorLogger) -> None:
         self.name = name
         self.fuel_type = fuel_type
         self.overclock = check_overclock(overclock)
         self.data_frame = data_frame
         self.attributes = self._find_power_gen()
+        self.logger = logger
     
     def _find_power_gen(self) -> dict:
         '''

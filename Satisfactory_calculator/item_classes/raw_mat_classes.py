@@ -4,16 +4,19 @@
 
 from common.constants import *
 
+from common.error_logs import ErrorLogger
+
 from calculations.calculations import item_per_minute
 
 import pandas as pd
 
 class RawMaterial:
-    def __init__(self,name:str,data_frame:pd.DataFrame) -> None:
+    def __init__(self,name:str,data_frame:pd.DataFrame, logger:ErrorLogger) -> None:
         self.name = name
         self.data_frame = data_frame[DS_RAW]
         self.data_frame = data_frame
         self.attributes = self._find_raw()
+        self.logger = logger
     
     def _find_raw(self) -> dict:
         '''

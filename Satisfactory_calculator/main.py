@@ -14,8 +14,13 @@ from item_classes.building_classes import Buildings
 from item_classes.power_classes import PowerGenerator
 from item_classes.production_classes import ProductionLine
 
+from common.error_logs import ErrorLogger
+
 # Importing constants
 from common.constants import *
+
+# Initializing the error log
+logger = ErrorLogger()
 
 # Define what is requested
 requested_item = 'Screw'
@@ -34,14 +39,14 @@ requested_power_overclock = 100  # Overclock in %
 dfs = pd.read_excel("item_list.xlsx", sheet_name=DS_SHEETS)
 
 # Power generator class created
-power_use = PowerGenerator(requested_power, requested_fuel_type, requested_power_overclock, dfs)
+power_use = PowerGenerator(requested_power, requested_fuel_type, requested_power_overclock, dfs, logger)
 
 # The request items are now given a class
-req_item = Item(requested_item, requested_item_type, requested_item_overclock, dfs)
+req_item = Item(requested_item, requested_item_type, requested_item_overclock, dfs, logger)
 
 # Building class created
 build_use = req_item.get_production_facility()
-build_item = Buildings(build_use,requested_item_overclock,dfs)
+build_item = Buildings(build_use,requested_item_overclock,dfs, logger)
 
 # Requirement calculations done
 req_machines = number_of_machines(req_item.get_output_item_per_min(),requested_qty)
@@ -55,7 +60,7 @@ type_out_belt = req_item.get_belt_type_out_name(requested_qty)
 no_out_belt = req_item.get_belt_type_out_num_belts(requested_qty) 
 
 # Production line calculations
-production_line = ProductionLine(req_item,requested_qty,requested_item_overclock)
+production_line = ProductionLine(req_item,requested_qty,requested_item_overclock, logger)
 
 print("-------- Item request --------")
 print("Requested item: ", req_item.name," and type: ",req_item.item_type)

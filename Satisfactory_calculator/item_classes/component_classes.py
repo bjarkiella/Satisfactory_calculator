@@ -11,14 +11,16 @@ from calculations.calculations import number_of_machines
 import pandas as pd
 
 from item_classes.logistic_classes import Logistics
+from common.error_logs import ErrorLogger
 
 class Item:
-    def __init__(self,name:str,item_type:str,overclock:float,data_frame:pd.DataFrame) -> None:
+    def __init__(self,name:str,item_type:str,overclock:float,data_frame:pd.DataFrame,logger:ErrorLogger) -> None:
         self.name = name
         self.item_type = item_type
         self.overclock = check_overclock(overclock)
         self.data_frame = data_frame
         self.attributes = self._find_item()
+        self.logger = logger
     
     def _find_item(self) -> dict:
         '''
@@ -170,7 +172,7 @@ class Item:
         This function determines the required belt type
         '''       
         # Finds the required belts and returns its name and capcity
-        belt_type = Logistics(self.data_frame,req_rate)
+        belt_type = Logistics(self.data_frame,req_rate,self.logger)
         return {"name":belt_type.get_log_name(),
                 "capacity":belt_type.get_log_capacity(),
                 "num_belts":belt_type.get_no_belts()
@@ -203,7 +205,7 @@ class Item:
         updated_req_rate = req_rate/req_machines
         
         # Finds the required belts and returns its name and capacity
-        belt_type = Logistics(self.data_frame,updated_req_rate)
+        belt_type = Logistics(self.data_frame,updated_req_rate,self.logger)
         return {"name":belt_type.get_log_name(),
                 "capacity":belt_type.get_log_capacity(),
                 "num_belts":belt_type.get_no_belts()
