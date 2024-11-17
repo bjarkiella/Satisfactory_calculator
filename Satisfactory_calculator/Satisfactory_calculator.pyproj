@@ -28,6 +28,7 @@
     <Compile Include="calculations\calculations.py" />
     <Compile Include="common\common_checks.py" />
     <Compile Include="common\constants.py" />
+    <Compile Include="common\error_logs.py" />
     <Compile Include="common\read_item_list.py" />
     <Compile Include="item_classes\component_classes.py" />
     <Compile Include="item_classes\building_classes.py" />

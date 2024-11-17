@@ -1,23 +1,25 @@
 ### Here are the attributes of the items setup in a class
+### This class might need to be refactored using property
 
 from common.constants import *
 from calculations.calculations import item_per_minute
 from common.read_item_list import get_item_row
 from common.common_checks import check_overclock
-from item_classes.logistic_classes import Logistics
 from calculations.calculations import overclock_factor
 from calculations.calculations import number_of_machines
 
 import pandas as pd
 
 from item_classes.logistic_classes import Logistics
+from common.error_logs import ErrorLogger
 
 class Item:
-    def __init__(self,name:str,item_type:str,overclock:float,data_frame:pd.DataFrame) -> None:
+    def __init__(self,name:str,item_type:str,overclock:float,data_frame:pd.DataFrame,logger:ErrorLogger) -> None:
         self.name = name
         self.item_type = item_type
         self.overclock = check_overclock(overclock)
         self.data_frame = data_frame
+        self.logger = logger
         self.attributes = self._find_item()
     
     def _find_item(self) -> dict:
@@ -41,7 +43,10 @@ class Item:
             attributes["production_facility"] = item_row.get(DC_CRAFTED_IN, None)
             return attributes
         else:
-            raise ValueError("Item not found in the data frame")
+            error_message = "Item not found in the data frame"
+            if self.logger:
+                self.logger.log_error(error_message)
+            raise ValueError(error_message)
 
     def _extract_basic_attributes(self, item_row) -> dict:
         ''' Extracts core attributes like name, output quantity, and craft time. '''
@@ -170,10 +175,10 @@ class Item:
         This function determines the required belt type
         '''       
         # Finds the required belts and returns its name and capcity
-        belt_type = Logistics(self.data_frame,req_rate)
-        return {"name":belt_type.get_log_name(),
-                "capacity":belt_type.get_log_capacity(),
-                "num_belts":belt_type.get_no_belts()
+        belt_type = Logistics(self.data_frame,req_rate,self.logger)
+        return {"name":belt_type.log_name,
+                "capacity":belt_type.log_capacity,
+                "num_belts":belt_type.no_belts
                 }
    
     def get_belt_type_in_name(self, req_rate: float) -> str:
@@ -203,10 +208,10 @@ class Item:
         updated_req_rate = req_rate/req_machines
         
         # Finds the required belts and returns its name and capacity
-        belt_type = Logistics(self.data_frame,updated_req_rate)
-        return {"name":belt_type.get_log_name(),
-                "capacity":belt_type.get_log_capacity(),
-                "num_belts":belt_type.get_no_belts()
+        belt_type = Logistics(self.data_frame,updated_req_rate,self.logger)
+        return {"name":belt_type.log_name,
+                "capacity":belt_type.log_capacity,
+                "num_belts":belt_type.no_belts
                 }
     
     def get_belt_type_out_name(self, req_rate: float) -> str:
