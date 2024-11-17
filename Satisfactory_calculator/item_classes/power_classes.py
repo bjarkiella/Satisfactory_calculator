@@ -31,7 +31,10 @@ class PowerGenerator:
             }
             return attributes
         else:
-            raise ValueError("Item not found in the data frame")
+            error_message = "Item not found in the data frame"
+            if self.logger:
+                self.logger.log_error(error_message)
+            raise ValueError(error_message)
 
     def _extract_basic_attributes(self, power_gen_row) -> dict:
         ''' Extracts core attributes like name, output quantity, and craft time. '''

@@ -14,33 +14,37 @@ class Buildings:
         self.name = name
         self.data_frame = data_frame[DS_BUILD]
         self.overclock = check_overclock(overclock)
-        self.attributes = self._find_building()
         self.logger = logger
 
-    def _find_building(self) -> dict:
+    @property
+    def attributes(self) -> dict:
         '''
-        This function searches the data frame for the requested item and type and gives it the attributes
+        Dynamically and finds and returns the building attributes
         '''
         building_row = self.data_frame[(self.data_frame[DC_ITEM] == self.name)]
-
+        
         if not building_row.empty:
-            attributes = {
+            return {
                 "name": building_row.iloc[0].get(DC_ITEM, None),
                 "power_use": building_row.iloc[0].get(DC_POWER_USE, 0)*overclock_power(self.overclock),
                 "power_unit": building_row.iloc[0].get(DC_POWER_UNIT, None),
             }
-            return attributes
         else:
-            raise ValueError("Item not found in the data frame")
+            error_message = f"Building '{self.name}' not found in the data frame."
+            if self.logger:
+                self.logger.log_error(error_message)
+            raise ValueError(error_message)
 
-    def get_power_use(self)->float:
+    @property
+    def power_use(self) -> float:
         '''
-        This function returns the power use of the building
+        Returns the power use of the building dynamically.
         '''
-        return self.attributes.get("power_use", None)
-    
-    def get_power_unit(self)->str:
+        return self.attributes.get("power_use", 0)
+
+    @property
+    def power_unit(self) -> str:
         '''
-        This function returns the power unit
+        Returns the power unit of the building dynamically.
         '''
-        return self.attributes.get("power_unit",None)
+        return self.attributes.get("power_unit", None)

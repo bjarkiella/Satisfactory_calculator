@@ -34,7 +34,10 @@ class ProductionLine:
         This function iterates down through the input materials and stores the Item and Building information. Max depth set to 10
         '''
         if depth > max_depth:
-            raise RecursionError(f"Maximum recursion depth ({max_depth}) exceeded. Check for circular dependencies or invalid input data.")
+            warning_message = f"Maximum recursion depth ({max_depth}) exceeded. Check for circular dependencies or invalid input data."
+            if self.logger:
+                self.logger.log_error(warning_message)
+            raise RecursionError(warning_message)
         
         # Calculate the number of machines needed for the given output rate and overclock
         machine_count = number_of_machines(item.get_output_item_per_min(),req_output_rate)
@@ -46,7 +49,7 @@ class ProductionLine:
         input_materials = item.get_input_materials()
         
         # Initialize totals for required inputs and energy
-        total_energy = machine_count * building.get_power_use()
+        total_energy = machine_count * building.power_use
         requirements = {"production":item.get_production_facility(),"machines": machine_count, "energy": total_energy, "inputs": {}}
         
         # Loop through each input material and calculate recursively

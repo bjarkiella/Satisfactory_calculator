@@ -50,7 +50,7 @@ build_item = Buildings(build_use,requested_item_overclock,dfs, logger)
 
 # Requirement calculations done
 req_machines = number_of_machines(req_item.get_output_item_per_min(),requested_qty)
-req_power = amount_of_power(build_item.get_power_use(),req_machines)
+req_power = amount_of_power(build_item.power_use,req_machines)
 req_power_gen = amount_of_power_gen(req_power,power_use.get_power_gen())
 
 # Logstics calculations done
@@ -78,7 +78,7 @@ print("Requested power overclock: ", requested_power_overclock, "%")
 print(' ')
 print("--------- Required Machines ---------")
 print("Required number of machines:",req_machines)
-print("Required amount of power for ", req_item.get_production_facility(),": ",req_power,build_item.get_power_unit())
+print("Required amount of power for ", req_item.get_production_facility(),": ",req_power,build_item.power_unit)
 print("Required number of ", requested_power, " using ",requested_fuel_type, " as fuel: ", req_power_gen)
 print("Generated power ", power_use.get_power_gen(),power_use.get_power_gen_unit())
 
